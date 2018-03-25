@@ -9,7 +9,7 @@ public class MyViewController : UIViewController {
     //    var samplesDrums = ["drums/Drums01", "drums/Drums02"]
     //    var samplesKey = ["keyboard/Solo01", "keyboard/Solo02", "keyboard/Piano01"]
     //    var samplesBass = ["bass/acomp2_Bass", "bass/acomp3_Bass", "bass/acomp4_Bass"]
-    var samples = [["drums/Drums01", "drums/Drums02"], ["keyboard/Solo01", "keyboard/Solo02", "keyboard/Piano01"], ["bass/acomp2_Bass", "bass/acomp3_Bass", "bass/acomp4_Bass"]]
+    var samples = [["drums/Drums01", "drums/Drums02"], ["keyboard/Solo01", "keyboard/Solo02"], ["bass/acomp3_Bass", "bass/acomp7_Bass"]]
     
     var squares: [[MusicButton]] = [[],[],[]]
     var pressedButtons: [[Int]] = [[],[],[]]
@@ -124,21 +124,21 @@ public class MyViewController : UIViewController {
             i = i + 1
             j = 0
         }
-        
-        var auxDrums = queuePlayerDrums.items
-        var auxBass = queuePlayerDrums.items
-        var auxKey = queuePlayerDrums.items
-//        if auxKey[0] == auxBass[0] && auxKey[0] == auxDrums[0] && auxDrums[0] == auxBass[0]{
-//
-//        }
 
         play(drums: queuePlayerDrums, bass: queuePlayerBass, key: queuePlayerKeyboard)
     }
     
     @objc func play(drums: AVQueuePlayer, bass: AVQueuePlayer, key: AVQueuePlayer){
-        drums.play()
-        bass.play()
-        key.play()
+        if playButton.text == "Play"{
+            playButton.setTitle = "Pause"
+            drums.play()
+            bass.play()
+            key.play()
+        }else{
+            playButton.setTitle = "Play"
+            // PAREI AQUI
+        }
+        
     }
     
     @objc func reset(){
