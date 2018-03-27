@@ -129,15 +129,15 @@ public class MyViewController : UIViewController {
     }
     
     @objc func play(drums: AVQueuePlayer, bass: AVQueuePlayer, key: AVQueuePlayer){
-        if playButton.text == "Play"{
-            playButton.setTitle = "Pause"
+//        if playButton.text == "Play"{
+//            playButton.setTitle = "Pause"
             drums.play()
             bass.play()
             key.play()
-        }else{
-            playButton.setTitle = "Play"
-            // PAREI AQUI
-        }
+//        }else{
+//            playButton.setTitle = "Play"
+//            // PAREI AQUI
+//        }
         
     }
     
