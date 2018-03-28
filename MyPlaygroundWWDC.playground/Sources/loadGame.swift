@@ -3,7 +3,7 @@ import UIKit
 import PlaygroundSupport
 import AVFoundation
 
-public class MyViewController : UIViewController {
+public class MyViewControllerGame : UIViewController {
     
     var silence = "drums/Drums03"
     //    var samplesDrums = ["drums/Drums01", "drums/Drums02"]
