@@ -6,9 +6,6 @@ import AVFoundation
 public class MyViewControllerGame : UIViewController {
     
     var silence = "drums/Drums03"
-    //    var samplesDrums = ["drums/Drums01", "drums/Drums02"]
-    //    var samplesKey = ["keyboard/Solo01", "keyboard/Solo02", "keyboard/Piano01"]
-    //    var samplesBass = ["bass/acomp2_Bass", "bass/acomp3_Bass", "bass/acomp4_Bass"]
     var samples = [["drums/Drums01", "drums/Drums02"], ["keyboard/Solo01", "keyboard/Solo02"], ["bass/acomp3_Bass", "bass/acomp7_Bass"]]
     
     var squares: [[MusicButton]] = [[],[],[]]
@@ -18,6 +15,7 @@ public class MyViewControllerGame : UIViewController {
     var queuePlayerBass = AVQueuePlayer()
     var queuePlayerKeyboard = AVQueuePlayer()
     
+    // pra eliminar espacos em branco
     var lastDrum: MusicButton?
     var lastBass: MusicButton?
     var lastKeyboard: MusicButton?
@@ -26,24 +24,21 @@ public class MyViewControllerGame : UIViewController {
         let view = UIView()
         view.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9568627451, blue: 0.5960784314, alpha: 1)
         
-        
-        
         let label = UILabel()
-        label.frame = CGRect(x: 75, y: 10, width: 260, height: 70)
-        label.font = UIFont(name: "ActionManShaded", size: 30)
+        label.frame = CGRect(x: 230, y: 10, width: 350, height: 70)
+        label.font = UIFont(name: "ActionManShaded", size: 40)
         label.text = "BREG-O-MATIC"
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
-        
         view.addSubview(label)
         
-        // desenhando botões na tela
-        var initialPositionY = 105
-        var initialPositionX = 105
+        // draw buttons
+        var initialPositionY = 150
+        var initialPositionX = 182
         var i = 0
-        while initialPositionX < 250{
-            while initialPositionY < 460{
+        while initialPositionY < 300{
+            while initialPositionX < 580{
                 let btn = MusicButton()
                 btn.pressed = 0
                 btn.frame = CGRect(x: initialPositionX, y: initialPositionY, width: 40, height: 40)
@@ -52,51 +47,77 @@ public class MyViewControllerGame : UIViewController {
                 squares[i].append(btn)
                 pressedButtons[i].append(0)
                 btn.addTarget(self, action: #selector(tapped), for: UIControlEvents.touchUpInside)
+                btn.titleLabel?.font =  UIFont(name: "ActionMan", size: 25)
                 view.addSubview(btn)
-                initialPositionY = initialPositionY + 60
+                initialPositionX = initialPositionX + 60
             }
-            initialPositionX = initialPositionX + 60
-            initialPositionY = 105
+            initialPositionY = initialPositionY + 60
+            initialPositionX = 182
             i = i + 1
         }
         
-        let playButton = UIButton()
-        playButton.frame = CGRect(x: 160, y: 490, width: 60, height: 30)
-        playButton.setTitle("Play", for: UIControlState.normal)
-        playButton.layer.cornerRadius = 10
-        playButton.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
-        playButton.addTarget(self, action: #selector(prepareToPlay), for: UIControlEvents.touchUpInside)
+        // play button
+        let imagePlay = "icons/play.png"
+        let imageP = UIImage(named: imagePlay)
+        let playButton = UIImageView(image: imageP!)
+        playButton.frame = CGRect(x: 610, y: 207, width: 45, height: 45)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(prepareToPlay(tapGestureRecognizer:)))
+        playButton.isUserInteractionEnabled = true
+        playButton.addGestureRecognizer(tapGestureRecognizer)
         view.addSubview(playButton)
         
-        let resetButton = UIButton()
-        resetButton.frame = CGRect(x: 160, y: 550, width: 60, height: 30)
-        resetButton.setTitle("Reset", for: UIControlState.normal)
-        resetButton.layer.cornerRadius = 10
-        resetButton.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
-        resetButton.addTarget(self, action: #selector(reset), for: UIControlEvents.touchUpInside)
+        // icon drum
+        let imageDrum = "icons/drum.png"
+        let imageD = UIImage(named: imageDrum)
+        let drum = UIImageView(image: imageD!)
+        drum.frame = CGRect(x: 145, y: 152, width: 30, height: 30)
+        view.addSubview(drum)
+        
+        // icon keyboard
+        let imageKeyboard = "icons/key.png"
+        let imageK = UIImage(named: imageKeyboard)
+        let keyboard = UIImageView(image: imageK!)
+        keyboard.frame = CGRect(x: 145, y: 217, width: 25, height: 25)
+        view.addSubview(keyboard)
+        
+        // icon bass
+        let imageBass = "icons/bass.png"
+        let imageB = UIImage(named: imageBass)
+        let bass = UIImageView(image: imageB!)
+        bass.frame = CGRect(x: 145, y: 274, width: 30, height: 30)
+        view.addSubview(bass)
+        
+        // reset button
+        let imageReset = "icons/undo.png"
+        let imageR = UIImage(named: imageReset)
+        let resetButton = UIImageView(image: imageR!)
+        resetButton.frame = CGRect(x: 715, y: 400, width: 35, height: 35)
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(reset(tapGestureRecognizer2:)))
+        resetButton.isUserInteractionEnabled = true
+        resetButton.addGestureRecognizer(tapGestureRecognizer2)
         view.addSubview(resetButton)
         
         self.view = view
     }
     
     @objc func tapped(btn: MusicButton){
-        if btn.backgroundColor == #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1){
+        if btn.backgroundColor == #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 0.5){
             btn.setTitle("2", for: UIControlState.normal)
-            btn.backgroundColor = #colorLiteral(red: 0.09019608051, green: 0, blue: 0.3019607961, alpha: 1)
+            btn.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 0.745317851)
             btn.pressed = 2
-        }else if btn.backgroundColor == #colorLiteral(red: 0.09019608051, green: 0, blue: 0.3019607961, alpha: 1){
+        }else if btn.backgroundColor == #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 0.745317851){
             btn.setTitle("", for: UIControlState.normal)
             btn.backgroundColor = #colorLiteral(red: 0.008031652309, green: 0.5721685886, blue: 0.8133963943, alpha: 1)
             btn.pressed = 0
         }else{
-            btn.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
+            btn.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 0.5)
             btn.setTitle("1", for: UIControlState.normal)
             btn.pressed = 1
         }
         
     }
     
-    @objc func prepareToPlay(sender:UIButton){
+    @objc func prepareToPlay(tapGestureRecognizer: UITapGestureRecognizer){
         
         var i = 0
         var j = 0
@@ -106,11 +127,6 @@ public class MyViewControllerGame : UIViewController {
                     let urlPath = Bundle.main.path(forResource: silence, ofType:"wav")
                     let fileURL = NSURL(fileURLWithPath:urlPath!)
                     let playerItem = AVPlayerItem(url:fileURL as URL)
-                    queuePlayerDrums.insert(playerItem, after:nil)
-                }else{
-                    let urlPath = Bundle.main.path(forResource: samples[i][(squares[i][j].pressed!) - 1], ofType:"wav")
-                    let fileURL = NSURL(fileURLWithPath:urlPath!)
-                    let playerItem = AVPlayerItem(url:fileURL as URL)
                     if i == 0{
                         queuePlayerDrums.insert(playerItem, after:nil)
                     }else if i == 1{
@@ -118,30 +134,58 @@ public class MyViewControllerGame : UIViewController {
                     }else if i == 2{
                         queuePlayerBass.insert(playerItem, after:nil)
                     }
+                }else{
+                    let urlPath = Bundle.main.path(forResource: samples[i][(squares[i][j].pressed!) - 1], ofType:"wav")
+                    let fileURL = NSURL(fileURLWithPath:urlPath!)
+                    let playerItem = AVPlayerItem(url:fileURL as URL)
+                    let playerItem2 = AVPlayerItem(url:fileURL as URL)
+                    if i == 0{
+                        queuePlayerDrums.insert(playerItem, after:nil)
+                    }else if i == 1{
+                        queuePlayerKeyboard.insert(playerItem, after:nil)
+                        queuePlayerKeyboard.insert(playerItem2, after:nil)
+                    }else if i == 2{
+                        queuePlayerBass.insert(playerItem, after:nil)
+                        queuePlayerBass.insert(playerItem2, after:nil)
+                    }
                 }
                 j = j + 1
             }
             i = i + 1
             j = 0
         }
-
+        
         play(drums: queuePlayerDrums, bass: queuePlayerBass, key: queuePlayerKeyboard)
+        progress()
+    }
+    
+    // PROGRESSO EM ANDAMENTO MUITO BUGADO AAAAA
+    @objc func progress(){
+        let btn = UIView()
+        var p = 100
+        btn.frame = CGRect(x: p, y: 310, width: 10, height: 10)
+        btn.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
+        btn.layer.cornerRadius = 5
+        view.addSubview(btn)
+        var i = 0
+        while i < 6{
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
+                UIView.animate(withDuration: 0.5) {
+                    p = p + 50
+                    btn.frame = CGRect(x: p, y: 310, width: 10, height: 10)
+                }
+            }
+            i = i + 1
+        }
     }
     
     @objc func play(drums: AVQueuePlayer, bass: AVQueuePlayer, key: AVQueuePlayer){
-//        if playButton.text == "Play"{
-//            playButton.setTitle = "Pause"
-            drums.play()
-            bass.play()
-            key.play()
-//        }else{
-//            playButton.setTitle = "Play"
-//            // PAREI AQUI
-//        }
-        
+        drums.play()
+        bass.play()
+        key.play()
     }
     
-    @objc func reset(){
+    @objc func reset(tapGestureRecognizer2: UITapGestureRecognizer){
         queuePlayerBass.pause()
         queuePlayerKeyboard.pause()
         queuePlayerDrums.pause()
