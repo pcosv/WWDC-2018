@@ -6,6 +6,7 @@ import AVFoundation
 public class MyViewControllerGame : UIViewController {
     
     var silence = "drums/Drums03"
+    var play = 0
     var samples = [["drums/Drums02", "drums/Drums01"], ["keyboard/Piano01", "keyboard/Solo02"], ["bass/acomp3_Bass", "bass/acomp7_Bass"]]
     
     var squares: [[MusicButton]] = [[],[],[]]
@@ -15,6 +16,8 @@ public class MyViewControllerGame : UIViewController {
     var queuePlayerBass = AVQueuePlayer()
     var queuePlayerKeyboard = AVQueuePlayer()
     
+    
+    let premium = UILabel()
     
     let progress = UIView()
     
@@ -106,6 +109,16 @@ public class MyViewControllerGame : UIViewController {
         resetButton.addGestureRecognizer(tapGestureRecognizer2)
         view.addSubview(resetButton)
         
+        // premium
+        premium.frame = CGRect(x: 110, y: 400, width: 550, height: 30)
+        premium.font = UIFont(name: "ActionMan", size: 15)
+        premium.text = "3 bregas to win the surprise reward"
+        premium.numberOfLines = 0
+        premium.lineBreakMode = .byWordWrapping
+        premium.textAlignment = NSTextAlignment.center
+        premium.textColor = #colorLiteral(red: 0.01176470588, green: 0.5725490196, blue: 0.8117647059, alpha: 1)
+        view.addSubview(premium)
+        
         self.view = view
     }
     
@@ -186,6 +199,22 @@ public class MyViewControllerGame : UIViewController {
     }
     
     @objc func play(drums: AVQueuePlayer, bass: AVQueuePlayer, key: AVQueuePlayer){
+        play = play + 1
+        if play == 1{
+            premium.text = "2 bregas to win the surprise reward"
+        }else if play == 2{
+            premium.text = "1 brega to win the surprise reward"
+        }else{
+            premium.text = "Congratulations! You win the surprise reward! Click to see!"
+            let reward = UIButton()
+            reward.frame = CGRect(x: 320, y: 360, width: 120, height: 35)
+            reward.backgroundColor = #colorLiteral(red: 0.01176470588, green: 0.5725490196, blue: 0.8117647059, alpha: 1)
+            reward.layer.cornerRadius = 12
+            reward.setTitle("See my reward!", for: UIControlState.normal)
+            reward.titleLabel?.font =  UIFont(name: "ActionMan", size: 15)
+            reward.addTarget(self, action: #selector(goToReward), for: UIControlEvents.touchUpInside)
+            view.addSubview(reward)
+        }
         drums.play()
         bass.play()
         key.play()
@@ -209,5 +238,10 @@ public class MyViewControllerGame : UIViewController {
             }
             j = j + 1
         }
+    }
+    
+    @objc func goToReward() {
+        let rew = MyViewControllerReward()
+        present(MyViewControllerReward(), animated: false, completion: nil)
     }
 }
