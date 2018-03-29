@@ -4,7 +4,6 @@ import UIKit
 import PlaygroundSupport
 import AVFoundation
 
-
 let fontShaded = Bundle.main.url(forResource: "fonts/ActionManShaded", withExtension: "ttf")! as CFURL
 CTFontManagerRegisterFontsForURL(fontShaded, CTFontManagerScope.process, nil)
 

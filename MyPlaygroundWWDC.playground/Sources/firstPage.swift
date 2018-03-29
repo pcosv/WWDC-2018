@@ -10,7 +10,7 @@ public class MyViewControllerStart: UIViewController {
     let label = UILabel()
     label.frame = CGRect(x: 125, y: 80, width: 500, height: 200)
     label.font = UIFont(name: "ActionMan", size: 40)
-    label.text = "Do you want to get to know a special part of Brazil, full of good music, delicious food, lovely landscapes and fun people?"
+    label.text = "Do you want to get to know a special part of Brazil, full of good music, lovely landscapes and fun people?"
     label.numberOfLines = 0
     label.lineBreakMode = .byWordWrapping
     label.textAlignment = NSTextAlignment.center
@@ -18,7 +18,7 @@ public class MyViewControllerStart: UIViewController {
     view.addSubview(label)
     
     let comeToRecife = UIButton()
-    comeToRecife.frame = CGRect(x: 280, y: 300, width: 200, height: 40)
+    comeToRecife.frame = CGRect(x: 260, y: 300, width: 230, height: 40)
     comeToRecife.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
     comeToRecife.layer.cornerRadius = 12
     comeToRecife.setTitle("Come To Recife!", for: UIControlState.normal)
@@ -30,9 +30,8 @@ public class MyViewControllerStart: UIViewController {
   }
   
   @objc func buttonPress() {
-    let vc = MyViewControllerGame()
-    //print("testes")
-    present(MyViewControllerGame(), animated: false, completion: nil)
+    let game = MyViewControllerRecife()
+    present(MyViewControllerRecife(), animated: false, completion: nil)
   }
 }
 

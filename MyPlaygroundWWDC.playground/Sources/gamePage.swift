@@ -6,7 +6,7 @@ import AVFoundation
 public class MyViewControllerGame : UIViewController {
     
     var silence = "drums/Drums03"
-    var samples = [["drums/Drums01", "drums/Drums02"], ["keyboard/Solo01", "keyboard/Solo02"], ["bass/acomp3_Bass", "bass/acomp7_Bass"]]
+    var samples = [["drums/Drums02", "drums/Drums01"], ["keyboard/Piano01", "keyboard/Solo02"], ["bass/acomp3_Bass", "bass/acomp7_Bass"]]
     
     var squares: [[MusicButton]] = [[],[],[]]
     var pressedButtons: [[Int]] = [[],[],[]]
@@ -15,10 +15,8 @@ public class MyViewControllerGame : UIViewController {
     var queuePlayerBass = AVQueuePlayer()
     var queuePlayerKeyboard = AVQueuePlayer()
     
-    // pra eliminar espacos em branco
-    var lastDrum: MusicButton?
-    var lastBass: MusicButton?
-    var lastKeyboard: MusicButton?
+    
+    let progress = UIView()
     
     public override func loadView() {
         let view = UIView()
@@ -32,6 +30,17 @@ public class MyViewControllerGame : UIViewController {
         label.lineBreakMode = .byWordWrapping
         label.textColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
         view.addSubview(label)
+        // randomly select the buttons below and play!
+        
+        let instructions = UILabel()
+        instructions.frame = CGRect(x: 110, y: 100, width: 550, height: 30)
+        instructions.font = UIFont(name: "ActionMan", size: 15)
+        instructions.text = "Randomly select the buttons below and play!"
+        instructions.numberOfLines = 0
+        instructions.lineBreakMode = .byWordWrapping
+        instructions.textAlignment = NSTextAlignment.center
+        instructions.textColor = #colorLiteral(red: 0.01176470588, green: 0.5725490196, blue: 0.8117647059, alpha: 1)
+        view.addSubview(instructions)
         
         // draw buttons
         var initialPositionY = 150
@@ -60,7 +69,7 @@ public class MyViewControllerGame : UIViewController {
         let imagePlay = "icons/play.png"
         let imageP = UIImage(named: imagePlay)
         let playButton = UIImageView(image: imageP!)
-        playButton.frame = CGRect(x: 610, y: 207, width: 45, height: 45)
+        playButton.frame = CGRect(x: 610, y: 210, width: 40, height: 40)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(prepareToPlay(tapGestureRecognizer:)))
         playButton.isUserInteractionEnabled = true
         playButton.addGestureRecognizer(tapGestureRecognizer)
@@ -91,7 +100,7 @@ public class MyViewControllerGame : UIViewController {
         let imageReset = "icons/undo.png"
         let imageR = UIImage(named: imageReset)
         let resetButton = UIImageView(image: imageR!)
-        resetButton.frame = CGRect(x: 715, y: 400, width: 35, height: 35)
+        resetButton.frame = CGRect(x: 610, y: 270, width: 40, height: 40)
         let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(reset(tapGestureRecognizer2:)))
         resetButton.isUserInteractionEnabled = true
         resetButton.addGestureRecognizer(tapGestureRecognizer2)
@@ -143,7 +152,6 @@ public class MyViewControllerGame : UIViewController {
                         queuePlayerDrums.insert(playerItem, after:nil)
                     }else if i == 1{
                         queuePlayerKeyboard.insert(playerItem, after:nil)
-                        queuePlayerKeyboard.insert(playerItem2, after:nil)
                     }else if i == 2{
                         queuePlayerBass.insert(playerItem, after:nil)
                         queuePlayerBass.insert(playerItem2, after:nil)
@@ -156,23 +164,21 @@ public class MyViewControllerGame : UIViewController {
         }
         
         play(drums: queuePlayerDrums, bass: queuePlayerBass, key: queuePlayerKeyboard)
-        progress()
     }
     
-    // PROGRESSO EM ANDAMENTO MUITO BUGADO AAAAA
-    @objc func progress(){
-        let btn = UIView()
-        var p = 100
-        btn.frame = CGRect(x: p, y: 310, width: 10, height: 10)
-        btn.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
-        btn.layer.cornerRadius = 5
-        view.addSubview(btn)
+    // music progress
+    @objc func musicProgress(){
+        var p = 197
+        progress.frame = CGRect(x: p, y: 320, width: 10, height: 10)
+        progress.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.2509803922, blue: 0.2078431373, alpha: 1)
+        progress.layer.cornerRadius = 5
+        view.addSubview(progress)
         var i = 0
         while i < 6{
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6*(i + 1))) {
                 UIView.animate(withDuration: 0.5) {
-                    p = p + 50
-                    btn.frame = CGRect(x: p, y: 310, width: 10, height: 10)
+                    p = p + 60
+                    self.progress.frame = CGRect(x: p, y: 320, width: 10, height: 10)
                 }
             }
             i = i + 1
@@ -183,12 +189,12 @@ public class MyViewControllerGame : UIViewController {
         drums.play()
         bass.play()
         key.play()
+        musicProgress()
     }
     
     @objc func reset(tapGestureRecognizer2: UITapGestureRecognizer){
-        queuePlayerBass.pause()
-        queuePlayerKeyboard.pause()
-        queuePlayerDrums.pause()
+        progress.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9568627451, blue: 0.5960784314, alpha: 1)
+        progress.frame = CGRect(x: 197, y: 320, width: 10, height: 10)
         queuePlayerBass.removeAllItems()
         queuePlayerKeyboard.removeAllItems()
         queuePlayerDrums.removeAllItems()
